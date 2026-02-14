@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentín ✨</title>
+    <style>
+        /* Estilos Generales */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #faf8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            transition: background-color 0.5s;
+        }
+
+        /* Pantalla 1: El Corazón */
+        #pantalla1 {
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .heart-btn {
+            font-size: 100px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
+            transition: transform 0.3s ease;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .heart-btn:hover { transform: scale(1.2) rotate(-5deg); }
+
+        h2 {
+            color: #ff4d6d;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            animation: latido 1.5s infinite;
+        }
+
+        /* Pantalla 2: La Invitación */
+        #pantalla2 {
+            display: none;
+            /*background: #faf8f0;*/
+            padding: 40px;
+            /*border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);*/
+            text-align: center;
+            max-width: 350px;
+            /*border: 2px solid #ffccd5;*/
+            animation: aparecer 0.8s ease-out;
+            z-index: 10;
+        }
+
+        .invitacion-titulo {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .detalles {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .detalles b { color: #ff4d6d; }
+
+        /* Contenedor de botones (La Broma) */
+        .botones-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            min-height: 100px; /* Espacio para que el botón crezca */
+        }
+
+        button {
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #btn-si {
+            background: #ff4d6d;
+            color: white;
+            padding: 10px 25px;
+            font-size: 16px;
+            position: relative;
+            z-index: 100;
+        }
+
+        #btn-no {
+            background: #999;
+            color: white;
+            padding: 10px 25px;
+            font-size: 16px;
+        }
+
+        /* Animaciones */
+        @keyframes latido {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: #ffccd5;
+            font-size: 20px;
+            z-index: -1;
+            animation: flotar 8s linear infinite;
+        }
+
+        @keyframes flotar {
+            from { transform: translateY(100vh); opacity: 1; }
+            to { transform: translateY(-10vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla1">
+        <div class="heart-btn" onclick="mostrarInvitacion()">💙</div>
+        <h2>San Valentín</h2>
+        <p style="color: #ff8fa3;">(Presióname)</p>
+    </div>
+
+    <div id="pantalla2">
+        <h1 class="invitacion-titulo">Al amor de mi vida 💖🧡</h1>
+        <div class="detalles">
+            <p>Si pudiera elegir un lugar seguro, sería a tu lado</p>
+            <p><b>¿Francis, Quieres ser mi San Valentín?</b></p>
+            <img src="https://i.pinimg.com/736x/1d/3f/c2/1d3fc2c26465751a1e23c62874132ed1.jpg" alt="Regalito" style="width: 100px;">
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <p style="font-style: italic;">Vamos, di que sí 😻</p>
+            
+            <div class="botones-container">
+                <button id="btn-si" onclick="confirmar()">SÍ</button>
+                <button id="btn-no" onclick="rechazar()">NO</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let escalaSi = 1;
+        let escalaNo = 1;
+
+        function mostrarInvitacion() {
+            document.getElementById('pantalla1').style.display = 'none';
+            document.getElementById('pantalla2').style.display = 'block';
+            document.body.style.backgroundColor = '#faf8f0';
+            
+            // Lluvia inicial de corazones
+            for(let i=0; i<15; i++) {
+                crearCorazon();
+            }
+        }
+
+        function rechazar() {
+            // 1. El SÍ crece cada vez más
+            escalaSi += 0.5;
+            document.getElementById('btn-si').style.transform = `scale(${escalaSi})`;
+            
+            // 2. El NO se hace chiquito
+            escalaNo -= 0.15;
+            if (escalaNo < 0.3) escalaNo = 0.3; // Límite para que no desaparezca
+            document.getElementById('btn-no').style.transform = `scale(${escalaNo})`;
+
+            // 3. Cambiar texto del botón NO al azar
+            const frases = ["¿Segura?", "Piénsalo...", "¡Opción incorrecta!", "Nop", "Intenta de nuevo", "Mírame 🌷"];
+            const random = Math.floor(Math.random() * frases.length);
+            document.getElementById('btn-no').innerText = frases[random];
+        }
+
+        function confirmar() {
+            alert("¡Siiiiiii mi monito! I CHOO- CHOO CHOOSE YOU 💙 Sabía que no podrías decir que no. ¡Nos vemos pronto!");
+        }
+
+        function crearCorazon() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '💜';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        // Seguir creando corazones de fondo cada cierto tiempo
+        setInterval(() => {
+            if(document.getElementById('pantalla2').style.display === 'block') {
+                crearCorazon();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
